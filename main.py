@@ -20,12 +20,15 @@ def main():
         # Allows us to quit the game.
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.quit()
                 return
+            
             
         # Make the screen black and move the frame. clock.tick(60) limits the fps to 60
         # and saves delta time into dt variable.
         screen.fill("black")
         player.draw(screen)
+        player.update(dt) # Movement controls: W A S D keys (not arrow keys!)
         pygame.display.flip()
         dt = clock.tick(60) / 1000
 
