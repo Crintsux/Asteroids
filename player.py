@@ -6,6 +6,7 @@ class Player(CircleShape):
     def __init__(self, x, y, radius = PLAYER_RADIUS):
         super().__init__(x, y, radius)
         self.rotation = 0
+        self.stamina = 100
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -27,8 +28,9 @@ class Player(CircleShape):
     
     def update(self, dt):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LSHIFT]: # sprint function when pressing shift
+        if keys[pygame.K_LSHIFT] and self.stamina > 0: # sprint function when pressing shift
             dt *= 3
+            self.stamina -= 0.8
         if keys[pygame.K_a]:
             self.rotate(-dt)
         if keys[pygame.K_d]:
