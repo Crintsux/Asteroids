@@ -20,6 +20,7 @@ def main():
         # Allows us to quit the game.
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                print("EXIT")
                 pygame.quit()
                 return
             
