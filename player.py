@@ -27,17 +27,21 @@ class Player(CircleShape):
         self.position += forward * PLAYER_SPEED * dt
     
     def update(self, dt):
-        print(self.stamina)
+        print(self.stamina) # Placeholder stamina check.
         keys = pygame.key.get_pressed()
+
+        # Stamina regeneration.
         if not keys[pygame.K_LSHIFT] and self.stamina < 100:
             self.stamina = min(self.stamina + STAMINA_REGEN_RATE, 100)
-        if keys[pygame.K_LSHIFT] and self.stamina > 0: # Sprint when pressing shift.
+        # Sprint implementation.
+        if keys[pygame.K_LSHIFT] and self.stamina > 0:
             dt *= 3
             self.stamina = max(self.stamina - STAMINA_SPENT, 0)
         
         # Restrics turning for when you're sprinting aside from when you're out of stam.
         can_turn = not keys[pygame.K_LSHIFT] or self.stamina <= 0
-        
+
+        # Main controls.
         if keys[pygame.K_a] and can_turn:
             self.rotate(-dt)
         if keys[pygame.K_d] and can_turn:
