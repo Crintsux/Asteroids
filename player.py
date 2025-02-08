@@ -1,6 +1,6 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, STAMINA_REGEN_RATE, STAMINA_SPENT
 
 class Player(CircleShape):
     def __init__(self, x, y, radius = PLAYER_RADIUS):
@@ -30,14 +30,17 @@ class Player(CircleShape):
         print(self.stamina)
         keys = pygame.key.get_pressed()
         if not keys[pygame.K_LSHIFT] and self.stamina < 100:
-            self.stamina += 0.2
+            self.stamina = min(self.stamina + STAMINA_REGEN_RATE, 100)
         if keys[pygame.K_LSHIFT] and self.stamina > 0: # Sprint when pressing shift.
             dt *= 3
-            self.stamina -= 0.9
-        # Makes you turn only when not sprinting but allows turning when you're out of stamina.
-        if (keys[pygame.K_a] and not keys[pygame.K_LSHIFT]) or (keys[pygame.K_a] and self.stamina <= 0):
+            self.stamina = max(self.stamina - STAMINA_SPENT, 0)
+        
+        # Restrics turning for when you're sprinting aside from when you're out of stam.
+        can_turn = not keys[pygame.K_LSHIFT] or self.stamina <= 0
+        
+        if keys[pygame.K_a] and can_turn:
             self.rotate(-dt)
-        if (keys[pygame.K_d] and not keys[pygame.K_LSHIFT]) or (keys[pygame.K_d] and self.stamina <= 0):
+        if keys[pygame.K_d] and can_turn:
             self.rotate(dt)
         if keys[pygame.K_w]:
             self.move(dt)
