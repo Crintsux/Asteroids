@@ -28,6 +28,8 @@ class Player(CircleShape):
     
     def update(self, dt):
         keys = pygame.key.get_pressed()
+        if not keys[pygame.K_LSHIFT] and self.stamina < 100:
+            self.stamina += 0.4
         if keys[pygame.K_LSHIFT] and self.stamina > 0: # sprint function when pressing shift
             dt *= 3
             self.stamina -= 0.8
