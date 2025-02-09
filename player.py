@@ -1,12 +1,14 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, STAMINA_REGEN_RATE, STAMINA_SPENT
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, STAMINA_REGEN_RATE, STAMINA_SPENT, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN
+from shot import Shot
 
 class Player(CircleShape):
     def __init__(self, x, y, radius = PLAYER_RADIUS):
         super().__init__(x, y, radius)
         self.rotation = 0
         self.stamina = 100
+        self.shoot_cd = 0
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -25,10 +27,23 @@ class Player(CircleShape):
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
+
+    def shoot(self):
+        # Prevents shooting when shoot is on CD.
+        if self.shoot_cd > 0:
+            return
+        # Spawns the shot itself.
+        bullet = Shot(self.position.x, self.position.y)
+        bullet.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+        self.shoot_cd = PLAYER_SHOOT_COOLDOWN
     
     def update(self, dt):
         # print(self.stamina) # Placeholder stamina check.
         keys = pygame.key.get_pressed()
+
+        # Shoot ability cooldown countdown.
+        if self.shoot_cd != 0:
+            self.shoot_cd -= dt
 
         # Stamina regeneration.
         if not keys[pygame.K_LSHIFT] and self.stamina < 100:
@@ -50,3 +65,5 @@ class Player(CircleShape):
             self.move(dt)
         if keys[pygame.K_s]:
             self.move(-dt)
+        if keys[pygame.K_SPACE]:
+            self.shoot()
