@@ -1,6 +1,8 @@
 import pygame
 from constants import *
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 def main():
     # Console start message.
@@ -12,11 +14,17 @@ def main():
     # Creating groups.
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
+
+    # Asigning classes to their groups.
+    Player.containers = (updatable, drawable)
+    Asteroid.containers = (updatable, drawable, asteroids)
+    AsteroidField.containers = (updatable)
 
     # Initializing screen and player.
-    Player.containers = (updatable, drawable) # Asigning the player class to groups.
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     player = Player(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2)
+    asteroid_field = AsteroidField()
 
     clock = pygame.time.Clock()
     dt = 0
@@ -37,6 +45,11 @@ def main():
             object.draw(screen)
         for object in updatable:
             object.update(dt)
+        for object in asteroids:
+            if object.collision_check(player):
+                print("GAME OVER")
+                pygame.quit()
+                return
         pygame.display.flip() # Frame forward.
         dt = clock.tick(60) / 1000 # Delta time stored to be used by object methods.
 

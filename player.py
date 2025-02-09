@@ -27,8 +27,7 @@ class Player(CircleShape):
         self.position += forward * PLAYER_SPEED * dt
     
     def update(self, dt):
-        print(self.stamina) # Placeholder stamina check.
-        # print(self.stamina)
+        # print(self.stamina) # Placeholder stamina check.
         keys = pygame.key.get_pressed()
 
         # Stamina regeneration.
