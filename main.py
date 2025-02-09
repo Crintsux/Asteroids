@@ -11,6 +11,10 @@ def main():
 
     # GAME SETUP
     pygame.init() # Pygame initializes
+    pygame.font.init()
+    font = pygame.font.SysFont(None, 50)
+    score = 0
+
 
     # Creating groups.
     updatable = pygame.sprite.Group()
@@ -52,11 +56,15 @@ def main():
             for bullet in shots:
                 if object.collision_check(bullet):
                     bullet.kill()
-                    object.split()
+                    if object.split() == True:
+                        score += 1
             if object.collision_check(player):
-                print("GAME OVER")
+                print(f"GAME OVER\nYour score was: {score} !")
                 pygame.quit()
                 return
+            
+        score_board = font.render(f"Score: {score}", True, (255, 255, 255))
+        screen.blit(score_board, (10, 10))
         pygame.display.flip() # Frame forward.
         dt = clock.tick(60) / 1000 # Delta time stored to be used by object methods.
 
