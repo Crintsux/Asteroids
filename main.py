@@ -14,6 +14,7 @@ def main():
     pygame.font.init()
     font = pygame.font.SysFont(None, 50)
     score = 0
+    stamina = MAX_STAMINA
 
 
     # Creating groups.
@@ -42,7 +43,7 @@ def main():
         # Allows us to quit the game.
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print("EXIT")
+                print(f"EXIT\nYour score was: {score} !")
                 pygame.quit()
                 return
             
@@ -62,9 +63,16 @@ def main():
                 print(f"GAME OVER\nYour score was: {score} !")
                 pygame.quit()
                 return
-            
+        
+        # Stamina bar
+        pygame.draw.rect(screen, (100, 100, 100), (10, 40, 200, 20))
+        stamina_width = (player.stamina / stamina) * 200
+        pygame.draw.rect(screen, (0, 255, 0), (10, 40, stamina_width, 20))
+
+        # Score board
         score_board = font.render(f"Score: {score}", True, (255, 255, 255))
         screen.blit(score_board, (10, 10))
+
         pygame.display.flip() # Frame forward.
         dt = clock.tick(60) / 1000 # Delta time stored to be used by object methods.
 
