@@ -57,7 +57,7 @@ def main():
             for bullet in shots:
                 if object.collision_check(bullet):
                     bullet.kill()
-                    if object.split() == True:
+                    if object.split() == False:
                         score += 1
             if object.collision_check(player):
                 print(f"GAME OVER\nYour score was: {score} !")
