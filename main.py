@@ -65,9 +65,9 @@ def main():
                 return
         
         # Stamina bar
-        pygame.draw.rect(screen, (100, 100, 100), (10, 40, 200, 20))
+        pygame.draw.rect(screen, (100, 100, 100), (1070, 10, 200, 20))
         stamina_width = (player.stamina / stamina) * 200
-        pygame.draw.rect(screen, (0, 255, 0), (10, 40, stamina_width, 20))
+        pygame.draw.rect(screen, (0, 255, 0), (1070, 10, stamina_width, 20))
 
         # Score board
         score_board = font.render(f"Score: {score}", True, (255, 255, 255))

@@ -1,13 +1,13 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, STAMINA_REGEN_RATE, STAMINA_SPENT, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, STAMINA_REGEN_RATE, STAMINA_SPENT, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN, MAX_STAMINA
 from shot import Shot
 
 class Player(CircleShape):
     def __init__(self, x, y, radius = PLAYER_RADIUS):
         super().__init__(x, y, radius)
         self.rotation = 0
-        self.stamina = 100
+        self.stamina = MAX_STAMINA
         self.shoot_cd = 0
 
     def triangle(self):
@@ -19,7 +19,7 @@ class Player(CircleShape):
         return [a, b, c]
     
     def draw(self, screen):
-        pygame.draw.polygon(screen, "white", self.triangle(), width = 2)
+        pygame.draw.polygon(screen, (100, 255, 100), self.triangle(), width = 3)
 
     def rotate(self, dt):
         self.rotation += dt * PLAYER_TURN_SPEED
@@ -49,12 +49,13 @@ class Player(CircleShape):
         if not keys[pygame.K_LSHIFT] and self.stamina < 100:
             self.stamina = min(self.stamina + STAMINA_REGEN_RATE, 100)
         # Sprint implementation.
-        if keys[pygame.K_LSHIFT] and self.stamina > 0:
+        is_moving = keys[pygame.K_w] or keys[pygame.K_s]
+        if keys[pygame.K_LSHIFT] and self.stamina > 0 and is_moving:
             dt *= 3
             self.stamina = max(self.stamina - STAMINA_SPENT, 0)
         
         # Restrics turning for when you're sprinting aside from when you're out of stam.
-        can_turn = not keys[pygame.K_LSHIFT] or self.stamina <= 0
+        can_turn = not keys[pygame.K_LSHIFT] or self.stamina <= 0 or not is_moving
 
         # Main controls.
         if keys[pygame.K_a] and can_turn:
