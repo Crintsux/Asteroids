@@ -28,6 +28,7 @@ class Player(CircleShape):
     
     def update(self, dt):
         print(self.stamina) # Placeholder stamina check.
+        # print(self.stamina)
         keys = pygame.key.get_pressed()
 
         # Stamina regeneration.

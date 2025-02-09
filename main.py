@@ -6,8 +6,15 @@ def main():
     # Console start message.
     print(f"Starting asteroids!\nScreen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
 
-    # Pygame initializes, game screen sets up, player gets initialized.
-    pygame.init()
+    # GAME SETUP
+    pygame.init() # Pygame initializes
+
+    # Creating groups.
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    # Initializing screen and player.
+    Player.containers = (updatable, drawable) # Asigning the player class to groups.
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     player = Player(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2)
 
@@ -25,13 +32,13 @@ def main():
                 return
             
             
-        # Make the screen black and move the frame. clock.tick(60) limits the fps to 60
-        # and saves delta time into dt variable.
-        screen.fill("black")
-        player.draw(screen)
-        player.update(dt) # Movement controls: W A S D keys (not arrow keys!)
-        pygame.display.flip()
-        dt = clock.tick(60) / 1000
+        screen.fill("black") # Fill the screen with color.
+        for object in drawable:
+            object.draw(screen)
+        for object in updatable:
+            object.update(dt)
+        pygame.display.flip() # Frame forward.
+        dt = clock.tick(60) / 1000 # Delta time stored to be used by object methods.
 
 if __name__ == "__main__":
     main()
